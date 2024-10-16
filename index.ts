@@ -30,27 +30,6 @@ app.get("/reason", ClerkExpressWithAuth(), reasonRouteGET);
 app.get("/post", ClerkExpressWithAuth(), postsForUserRouteGET);
 app.post("/review", ClerkExpressWithAuth(), reviewRoutePOST);
 
-
-// app.get("/collection/ofMemberAndNative", ClerkExpressWithAuth(), collectionsOfMemberAndNativeRouteGET);
-// app.get("/collection/nativeNotAdded", ClerkExpressWithAuth(), nativeNotAddedRouteGET);
-// app.get("/collection/:collectionId", ClerkExpressWithAuth(), collectionRouteGET);
-
-// app.get("/collections", ClerkExpressWithAuth(), collectionsRouteGET);
-// app.post("/collection", ClerkExpressWithAuth(), collectionRoutePOST);
-
-// app.post("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRoutePOST);
-// app.delete("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteDELETE);
-// app.get("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteGET);
-
-// app.patch("/check", ClerkExpressWithAuth(), checkRoutePATCH);
-// app.post("/check", ClerkExpressWithAuth(), checkRoutePOST);
-// app.delete("/check", ClerkExpressWithAuth(), checkRouteDELETE);
-
-// app.get("/nativeChecks/:collectionId", ClerkExpressWithAuth(), nativeCheckOfOneCollectionRouteGET);
-// app.post("/nativeChecks", ClerkExpressWithAuth(), nativeCheckPOST);
-
-// app.post("/upload", ClerkExpressWithAuth(), uploadRoutePOST);
-
 app.use((req, res, next) => {
     res.status(404);
     next();
