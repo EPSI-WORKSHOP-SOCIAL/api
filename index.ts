@@ -1,19 +1,13 @@
-import express, { Application, Response } from "express";
+import express, { Application } from "express";
 import dotenv from "dotenv";
 import { ClerkExpressWithAuth, LooseAuthProp } from "@clerk/clerk-sdk-node";
-import { db } from "./lib/db";
 var cors = require('cors');
 import bodyParser from 'body-parser';
 
-import { collectionsOfMemberAndNativeRouteGET } from "./routes/collection/ofMemberAndNative/route";
-import { profileRouteGET } from "./routes/profile/route";
-import { collectionsOfMembersRouteDELETE, collectionsOfMembersRouteGET, collectionsOfMembersRoutePOST } from "./routes/collectionsOfMembers/route";
-import { checkRouteDELETE, checkRoutePATCH, checkRoutePOST } from "./routes/check/route";
-import { nativeNotAddedRouteGET } from "./routes/collection/nativeNotAdded/route";
-import { collectionRouteGET, collectionRoutePOST } from "./routes/collection/route";
-import { collectionsRouteGET } from "./routes/collections/route";
-import { uploadRoutePOST } from "./routes/upload/route";
-import { nativeCheckOfOneCollectionRouteGET, nativeCheckPOST } from "./routes/nativeChecks/route";
+import { profileRouteGET } from "./controllers/profile/route";
+import { reviewRoutePOST } from "./controllers/review/route";
+import { reasonRouteGET } from "./controllers/reason/route";
+import { postsForUserRouteGET } from "./controllers/post/route";
 
 dotenv.config();
 
@@ -32,56 +26,30 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '100mb' }));
 app.use("/static", express.static("public"));
 
 app.get("/profile", ClerkExpressWithAuth(), profileRouteGET);
+app.get("/reason", ClerkExpressWithAuth(), reasonRouteGET);
+app.get("/post", ClerkExpressWithAuth(), postsForUserRouteGET);
+app.post("/review", ClerkExpressWithAuth(), reviewRoutePOST);
 
-app.get("/collection/ofMemberAndNative", ClerkExpressWithAuth(), collectionsOfMemberAndNativeRouteGET);
-app.get("/collection/nativeNotAdded", ClerkExpressWithAuth(), nativeNotAddedRouteGET);
-app.get("/collection/:collectionId", ClerkExpressWithAuth(), collectionRouteGET);
 
-app.get("/collections", ClerkExpressWithAuth(), collectionsRouteGET);
-app.post("/collection", ClerkExpressWithAuth(), collectionRoutePOST);
+// app.get("/collection/ofMemberAndNative", ClerkExpressWithAuth(), collectionsOfMemberAndNativeRouteGET);
+// app.get("/collection/nativeNotAdded", ClerkExpressWithAuth(), nativeNotAddedRouteGET);
+// app.get("/collection/:collectionId", ClerkExpressWithAuth(), collectionRouteGET);
 
-app.post("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRoutePOST);
-app.delete("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteDELETE);
-app.get("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteGET);
+// app.get("/collections", ClerkExpressWithAuth(), collectionsRouteGET);
+// app.post("/collection", ClerkExpressWithAuth(), collectionRoutePOST);
 
-app.patch("/check", ClerkExpressWithAuth(), checkRoutePATCH);
-app.post("/check", ClerkExpressWithAuth(), checkRoutePOST);
-app.delete("/check", ClerkExpressWithAuth(), checkRouteDELETE);
+// app.post("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRoutePOST);
+// app.delete("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteDELETE);
+// app.get("/collectionsOfMembers", ClerkExpressWithAuth(), collectionsOfMembersRouteGET);
 
-app.get("/nativeChecks/:collectionId", ClerkExpressWithAuth(), nativeCheckOfOneCollectionRouteGET);
-app.post("/nativeChecks", ClerkExpressWithAuth(), nativeCheckPOST);
+// app.patch("/check", ClerkExpressWithAuth(), checkRoutePATCH);
+// app.post("/check", ClerkExpressWithAuth(), checkRoutePOST);
+// app.delete("/check", ClerkExpressWithAuth(), checkRouteDELETE);
 
-app.post("/upload", ClerkExpressWithAuth(), uploadRoutePOST);
+// app.get("/nativeChecks/:collectionId", ClerkExpressWithAuth(), nativeCheckOfOneCollectionRouteGET);
+// app.post("/nativeChecks", ClerkExpressWithAuth(), nativeCheckPOST);
 
-app.get("/collection/new/:userId", async (req, res: Response) => {
-    try {
-        const nativeCollection = await db.memberCollection.create({
-            data: {
-                collection: {
-                    create: {
-                        name: "Pen 68 Brush",
-                        imagePath: "https://m.media-amazon.com/images/I/81TzmBB2XuL.jpg",
-                        brand: "Stabilo",
-                        hasNoNativeChecks: false
-                    },
-                },
-                member: {
-                    connect: {
-                        userId: req.params.userId,
-                    },
-                },
-            },
-            include: {
-                collection: true,
-            },
-        });
-
-        res.json(nativeCollection);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal Error", context: error });
-    }
-});
+// app.post("/upload", ClerkExpressWithAuth(), uploadRoutePOST);
 
 app.use((req, res, next) => {
     res.status(404);

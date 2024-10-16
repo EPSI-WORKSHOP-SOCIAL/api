@@ -2,26 +2,30 @@ import { WithAuthProp } from "@clerk/clerk-sdk-node";
 import { Request, Response } from "express";
 
 import { initialMember } from "../../lib/initial-profile";
+import { db } from "../../lib/db";
 
-export const profileRouteGET = async (
+export const reasonRouteGET = async (
     req: WithAuthProp<Request>,
     res: Response
 ) => {
     try {
-        const userId = req.auth.userId;
+        const clerkUserId = req.auth.userId;
 
-        if (!userId) {
+        if (!clerkUserId) {
             return res.status(401).send("Unauthorized");
         }
 
-        const profile = await initialMember(userId);
+        const user = await initialMember(clerkUserId);
 
-        if (!profile) {
+        if (!user) {
             return res.status(401).send("Unauthorized");
         }
 
-        return res.json(profile.id);
+        const reasons = await db.reason.findMany();
+
+        return res.json(reasons);
     } catch (error) {
+        console.log(error);
         return res.status(500).send("Internal Error");
     }
 };

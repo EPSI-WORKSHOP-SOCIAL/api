@@ -7,124 +7,87 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Member {
-    id     String @id @default(uuid())
-    userId String @unique
-
-    CollectionsOfMembers CollectionsOfMembers[]
-    memberCollections    MemberCollection[]
-    checks               Check[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([userId])
-}
-
-model Collection {
-    id                String  @id @default(uuid())
-    name              String
-    brand             String
-    hasNoNativeChecks Boolean @default(false)
-    imagePath         String?
-
-    imageId String?
-    image   Image?  @relation(fields: [imageId], references: [id], onDelete: Cascade)
-
-    CollectionsOfMembers CollectionsOfMembers[]
-    memberCollections    MemberCollection[]
-    nativeCollections    NativeCollection[]
-    nativeChecks         NativeCheck[]
-    checks               Check[]
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model MemberCollection {
+model User {
     id String @id @default(uuid())
 
-    memberId String
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+    clerkId String  @unique
+    balance Decimal?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([memberId])
-    @@index([collectionId])
+    reviews Review[]
 }
 
-model NativeCollection {
+model Reason {
     id String @id @default(uuid())
 
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+    content String
+
+    reviews Review[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@index([collectionId])
 }
 
-model CollectionsOfMembers {
-    memberId String
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-
-    addedAt DateTime @default(now())
-
-    @@id([memberId, collectionId])
-}
-
-model Check {
-    penNumber String
-
-    quantity    Int     @default(1)
-    description String? @db.Text
-    hexaColor   String?
-    isEndOfLife Boolean @default(false)
-
-    memberId String
-    member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@id([memberId, collectionId, penNumber])
-    @@index([memberId])
-    @@index([collectionId])
-}
-
-model NativeCheck {
+model Company {
     id String @id @default(uuid())
 
-    penNumber String
+    name String
+    logo String?
 
-    collectionId String
-    collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+    contracts Contract[]
+    posts     Post[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-
-    @@index([collectionId])
 }
 
-model Image {
+model Contract {
     id String @id @default(uuid())
 
-    path     String
-    blurhash String?
+    companyId String
+    company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
+
+    amount     Decimal?
+    maxReviews Int?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Post {
+    id String @id @default(uuid())
+
+    companyId String
+    company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
+
+    url         String
+    show        Boolean
+    origin      String
+    isOffensive Boolean
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    collections Collection[]
+    reviews Review[]
+}
+
+model Review {
+    id String @id @default(uuid())
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: NoAction)
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: NoAction)
+
+    reasonId String?
+    reason   Reason? @relation(fields: [reasonId], references: [id], onDelete: NoAction)
+
+    answer Boolean
+    price  Decimal?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

@@ -1,16 +1,16 @@
 import clerkClient from "@clerk/clerk-sdk-node";
 import { db } from "./db";
 
-export const initialMember = async (userId: string) => {
-    const user = await clerkClient.users.getUser(userId);
+export const initialMember = async (clerkUserId: string) => {
+    const user = await clerkClient.users.getUser(clerkUserId);
 
     if (!user) {
         return false;
     }
 
-    const member = await db.member.findUnique({
+    const member = await db.user.findUnique({
         where: {
-            userId: user.id,
+            clerkId: user.id,
         },
     });
 
@@ -18,9 +18,9 @@ export const initialMember = async (userId: string) => {
         return member;
     }
 
-    const newMember = await db.member.create({
+    const newMember = await db.user.create({
         data: {
-            userId: user.id,
+            clerkId: user.id
         },
     });
 
