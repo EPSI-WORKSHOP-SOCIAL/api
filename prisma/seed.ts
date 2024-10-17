@@ -19,10 +19,18 @@ async function main() {
                 posts: {
                     create: [
                         {
-                            url: faker.internet.url(),
+                            imageUrl: faker.image.url(640, 480, 'business', true),
+                            content: faker.lorem.sentence(),
                             show: faker.datatype.boolean(),
                             origin: faker.location.country(),
                             isOffensive: faker.datatype.boolean(),
+                        },
+                    ],
+                },
+                reasons: {
+                    create: [
+                        {
+                            content: faker.lorem.sentence()
                         },
                     ],
                 },
@@ -30,17 +38,6 @@ async function main() {
         });
 
         console.log(`Company created: ${company.name}`);
-    }
-
-    // Générer des fausses raisons
-    for (let i = 0; i < 5; i++) {
-        const reason = await db.reason.create({
-            data: {
-                content: faker.lorem.sentence(),
-            },
-        });
-
-        console.log(`Reason created: ${reason.content}`);
     }
 
     // Générer des utilisateurs avec des soldes et des avis

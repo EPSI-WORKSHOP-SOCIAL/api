@@ -23,9 +23,22 @@ export const postsForUserRouteGET = async (
 
         const postsForUser = await db.post.findMany({
             where: {
+                show: true,
                 reviews: {
                     none: {
                         userId: user.id
+                    }
+                }
+            },
+            include: {
+                company: {
+                    include: {
+                        reasons: {
+                            select: {
+                                id: true,
+                                content: true,
+                            }
+                        }
                     }
                 }
             },

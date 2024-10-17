@@ -10,7 +10,7 @@ datasource db {
 model User {
     id String @id @default(uuid())
 
-    clerkId String  @unique
+    clerkId String   @unique
     balance Decimal?
 
     createdAt DateTime @default(now())
@@ -23,6 +23,9 @@ model Reason {
     id String @id @default(uuid())
 
     content String
+
+    companyId String
+    company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
 
     reviews Review[]
 
@@ -38,6 +41,7 @@ model Company {
 
     contracts Contract[]
     posts     Post[]
+    reasons   Reason[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -62,7 +66,8 @@ model Post {
     companyId String
     company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
 
-    url         String
+    imageUrl    String?
+    content     String?
     show        Boolean
     origin      String
     isOffensive Boolean

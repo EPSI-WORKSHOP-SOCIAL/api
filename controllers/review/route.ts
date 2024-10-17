@@ -36,9 +36,6 @@ export const reviewRoutePOST = async (
         if (typeof body.answer === "undefined") {
             return res.status(400).send("Invalid Answer");
         }
-        if (!body.answer && !body.reasonId) {
-            return res.status(400).send("Invalid Reason ID");
-        }
 
         const review = await db.review.create({
             data: {
