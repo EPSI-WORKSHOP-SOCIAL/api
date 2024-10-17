@@ -19,7 +19,7 @@ async function main() {
                 posts: {
                     create: [
                         {
-                            url: faker.internet.url(),
+                            imageUrl: faker.image.url(640, 480, 'business', true),
                             content: faker.lorem.sentence(),
                             show: faker.datatype.boolean(),
                             origin: faker.location.country(),

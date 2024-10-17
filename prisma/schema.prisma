@@ -66,7 +66,7 @@ model Post {
     companyId String
     company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
 
-    url         String?
+    imageUrl    String?
     content     String?
     show        Boolean
     origin      String
