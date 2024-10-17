@@ -27,21 +27,17 @@ async function main() {
                         },
                     ],
                 },
+                reasons: {
+                    create: [
+                        {
+                            content: faker.lorem.sentence()
+                        },
+                    ],
+                },
             },
         });
 
         console.log(`Company created: ${company.name}`);
-    }
-
-    // Générer des fausses raisons
-    for (let i = 0; i < 5; i++) {
-        const reason = await db.reason.create({
-            data: {
-                content: faker.lorem.sentence(),
-            },
-        });
-
-        console.log(`Reason created: ${reason.content}`);
     }
 
     // Générer des utilisateurs avec des soldes et des avis

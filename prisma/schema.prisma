@@ -24,6 +24,9 @@ model Reason {
 
     content String
 
+    companyId String
+    company   Company @relation(fields: [companyId], references: [id], onDelete: NoAction)
+
     reviews Review[]
 
     createdAt DateTime @default(now())
@@ -38,6 +41,7 @@ model Company {
 
     contracts Contract[]
     posts     Post[]
+    reasons   Reason[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
