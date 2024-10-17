@@ -20,6 +20,7 @@ async function main() {
                     create: [
                         {
                             url: faker.internet.url(),
+                            content: faker.lorem.sentence(),
                             show: faker.datatype.boolean(),
                             origin: faker.location.country(),
                             isOffensive: faker.datatype.boolean(),
