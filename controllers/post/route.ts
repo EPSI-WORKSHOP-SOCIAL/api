@@ -35,6 +35,7 @@ export const postsForUserRouteGET = async (
                     include: {
                         reasons: {
                             select: {
+                                id: true,
                                 content: true,
                             }
                         }
